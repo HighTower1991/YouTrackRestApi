@@ -11,15 +11,25 @@ import javax.xml.bind.annotation.*;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Project extends BaseItem<YouTrack> {
     @XmlTransient
-    public final CommandBasedList<Project, Issue> issues;
+    private final ThreadLocal<CommandBasedList<Project, Issue>> issues;
     @XmlAttribute(name = "name")
     private String name;
     @XmlAttribute(name = "shortName")
     private String shortName;
 
     Project() {
-        issues = new CommandBasedList<Project, Issue>(this,
-                new AddIssue(this), new RemoveIssue(this), new GetIssues(this), new QueryIssues(this), new GetIssue(this));
+        final Project thiz = this;
+        issues = new ThreadLocal<CommandBasedList<Project, Issue>>() {
+            @Override
+            public CommandBasedList<Project, Issue> get() {
+                return new CommandBasedList<Project, Issue>(thiz,
+                        new AddIssue(thiz), new RemoveIssue(thiz), new GetIssues(thiz), new QueryIssues(thiz), new GetIssue(thiz));
+            }
+        };
+    }
+
+    public CommandBasedList<Project, Issue> issues() {
+        return issues.get();
     }
 
     @Override

@@ -21,16 +21,27 @@ import java.util.Map;
 public class YouTrack extends BaseItem {
 
     private final static Map<String, YouTrack> INSTANCES = new HashMap<String, YouTrack>();
-    public final CommandBasedList<YouTrack, Project> projects = new CommandBasedList<YouTrack, Project>(this, null, null, new GetProjects(this), null, new GetProject(this));
+    private final ThreadLocal<CommandBasedList<YouTrack, Project>> projects;
     private final String hostAddress;
     private String authorization;
     private String userName;
     private String password;
-    private final static long INTERVAL = 180000;
+    private final static long INTERVAL = 180000L;
     private long timeout = -1L;
 
     private YouTrack(@NotNull String hostAddress) {
         this.hostAddress = hostAddress;
+        final YouTrack thiz = this;
+        projects = new ThreadLocal<CommandBasedList<YouTrack, Project>>() {
+            @Override
+            public CommandBasedList<YouTrack, Project> get() {
+                return new CommandBasedList<YouTrack, Project>(thiz, null, null, new GetProjects(thiz), null, new GetProject(thiz));
+            }
+        };
+    }
+
+    public CommandBasedList<YouTrack, Project> projects() {
+        return projects.get();
     }
 
     /**
@@ -51,10 +62,8 @@ public class YouTrack extends BaseItem {
                 '}';
     }
 
-
     /**
      * Determines if stored YouTrack auth token is still valid for request, and if not, refreshes it.
-     *
      */
 
     private void checkAuthState() throws AuthenticationErrorException, CommandExecutionException {
