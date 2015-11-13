@@ -33,10 +33,10 @@ public class CommandBasedList<O extends BaseItem, R extends BaseItem<O>> {
         this.singleItemCommand = singleItemCommand;
     }
     @NotNull
-    public void add(final @NotNull R item) throws CommandExecutionException {
+    public CommandResultData<R> add(final @NotNull R item) throws CommandExecutionException {
         assert addCommand != null;
         addCommand.setItem(item);
-        owner.getYouTrack().execute(addCommand);
+        return owner.getYouTrack().execute(addCommand);
     }
     @NotNull
     public void remove(final @NotNull R item) throws CommandExecutionException {

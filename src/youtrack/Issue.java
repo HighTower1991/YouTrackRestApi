@@ -49,9 +49,10 @@ public class Issue extends BaseItem<YouTrack> {
         links = new CommandBasedList<Issue, IssueLink>(this, new AddIssueLink(this), new RemoveIssueLink(this), new GetIssueLinks(this), null, null);
         tags = new CommandBasedList<Issue, IssueTag>(this, new AddIssueTag(this), new RemoveIssueTag(this), new GetIssueTags(this), null, null);
     }
-    private Issue(String summary, String description) {
+    private Issue(Project project, String summary, String description) {
         wrapper = true;
         fieldArray = new ArrayList<BaseIssueField>();
+        fieldArray.add(SingleField.createField("project", IssueFieldValue.createValue(project.getId())));
         fieldArray.add(SingleField.createField("summary", IssueFieldValue.createValue(summary)));
         fieldArray.add(SingleField.createField("description", IssueFieldValue.createValue(description)));
         this.afterUnmarshal(null, null);
@@ -69,8 +70,8 @@ public class Issue extends BaseItem<YouTrack> {
         this.fields = new HashMap<String, BaseIssueField>();
         this.fields.putAll(fields);
     }
-    public static Issue createIssue(String summary, String description) {
-        return new Issue(summary, description);
+    public static Issue createIssue(Project project, String summary, String description) {
+        return new Issue(project, summary, description);
     }
     public HashMap<String, BaseIssueField> getFields() {
         return new HashMap<String, BaseIssueField>(fields);
@@ -198,7 +199,10 @@ public class Issue extends BaseItem<YouTrack> {
             this.fields.putAll(issue.fields);
         }
     }
-    public String getProjectId() {
+    public String getProjectId() throws IOException, CommandExecutionException {
+    	if(getId()==null || getId().isEmpty()){
+    		return getFieldByName("project").getValue();
+    	}
         return getId().substring(0, getId().indexOf("-"));
     }
 }
