@@ -41,6 +41,7 @@ public class Issue extends BaseItem<YouTrack> {
     @XmlTransient
     private boolean wikify;
     Issue() {
+    	
         final Issue thiz = this;
         comments = new CommandBasedList<Issue, IssueComment>(this,
                 new AddComment(this), new RemoveComment(this), new GetIssueComments(this), null, null);
@@ -177,7 +178,11 @@ public class Issue extends BaseItem<YouTrack> {
         return (MultiUserFieldValue) getFieldByName("Assignee");
     }
     public void setAssignee(String assignee) throws IOException, SetIssueFieldException, NoSuchIssueFieldException, CommandExecutionException {
-        setFieldByName("Assignee", assignee);
+    	String fieldName = "Assignee";
+		if(!fields.containsKey(fieldName )) {
+        	createField(fieldName, assignee);
+        }
+        setFieldByName(fieldName, assignee);
     }
     public String getReporter() throws IOException, CommandExecutionException {
         BaseIssueFieldValue reporterName = getFieldByName("reporterName");
@@ -205,4 +210,50 @@ public class Issue extends BaseItem<YouTrack> {
     	}
         return getId().substring(0, getId().indexOf("-"));
     }
+    
+    public String getFixVersions() throws IOException, CommandExecutionException {
+        BaseIssueFieldValue version = getFieldByName("Fix versions");
+        return version == null ? null : version.getValue();
+    }
+    public void setFixVersions(String version) throws IOException, SetIssueFieldException, NoSuchIssueFieldException, CommandExecutionException {
+    	String fieldName = "Fix versions";
+		if(!fields.containsKey(fieldName )) {
+        	createField(fieldName, version);
+        }
+    	setFieldByName(fieldName, version);
+    }
+    public String getAffectedVersions() throws IOException, CommandExecutionException {
+        BaseIssueFieldValue version = getFieldByName("Affected versions");
+        return version == null ? null : version.getValue();
+    }
+    public void setAffectedVersions(String version) throws IOException, SetIssueFieldException, NoSuchIssueFieldException, CommandExecutionException {
+    	String fieldName = "Affected versions";
+		if(!fields.containsKey(fieldName )) {
+        	createField(fieldName, version);
+        }
+    	setFieldByName(fieldName, version);
+    }
+    /**
+     * Estimation en heures indiquées dans Youtrack
+     * @return estimation en nombre d'heures
+     * @throws IOException
+     * @throws CommandExecutionException
+     */
+    public Integer getEstimation() throws IOException, CommandExecutionException {
+        BaseIssueFieldValue estimation= getFieldByName("Estimation");
+        if(estimation == null || estimation.getValue().isEmpty()) return null;
+        return Integer.valueOf(estimation.getValue())/60;
+    }
+    
+    public void setEstimation(int heures) throws IOException, SetIssueFieldException, NoSuchIssueFieldException, CommandExecutionException {
+    	String fieldName = "Estimation";
+    	String estimation = String.valueOf(heures);
+		if(!fields.containsKey(fieldName )) {
+        	createField(fieldName, estimation);
+        }
+    	setFieldByName(fieldName, estimation);
+    }
+	private BaseIssueField createField(String fieldName, String value) {
+		return fields.put(fieldName, SingleField.createField(fieldName, IssueFieldValue.createValue(value)));
+	}
 }
