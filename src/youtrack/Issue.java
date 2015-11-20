@@ -43,8 +43,7 @@ public class Issue extends BaseItem<YouTrack> {
     Issue() {
     	
         final Issue thiz = this;
-        comments = new CommandBasedList<Issue, IssueComment>(this,
-                new AddComment(this), new RemoveComment(this), new GetIssueComments(this), null, null);
+        comments = new CommandBasedList<Issue, IssueComment>(this, new AddComment(this), new RemoveComment(this), new GetIssueComments(this), null, null);
         attachments = new CommandBasedList<Issue, IssueAttachment>(this, new AddAttachment(this),
                 new RemoveAttachment(this), new GetIssueAttachments(this), null, null);
         links = new CommandBasedList<Issue, IssueLink>(this, new AddIssueLink(this), new RemoveIssueLink(this), new GetIssueLinks(this), null, null);
@@ -255,5 +254,28 @@ public class Issue extends BaseItem<YouTrack> {
     }
 	private BaseIssueField createField(String fieldName, String value) {
 		return fields.put(fieldName, SingleField.createField(fieldName, IssueFieldValue.createValue(value)));
+	}
+	public void setPcmNumber(String number) throws SetIssueFieldException, IOException, NoSuchIssueFieldException, CommandExecutionException {
+		String fieldName = "PCM";
+		if(!fields.containsKey(fieldName )) {
+        	createField(fieldName, number);
+        }
+    	setFieldByName(fieldName, number);
+	}
+	public String getPcmNumber() throws IOException, CommandExecutionException {
+		BaseIssueFieldValue number = getFieldByName("PCM");
+        return number == null ? null : number.getValue();
+	}
+	public void setPcmDeliver(boolean deliver) throws SetIssueFieldException, IOException, NoSuchIssueFieldException, CommandExecutionException {
+		String fieldName = "PcmDeliver";
+		String value = deliver?"Oui":"Non";
+		if(!fields.containsKey(fieldName )) {
+        	createField(fieldName, value);
+        }
+    	setFieldByName(fieldName, value);
+	}
+	public Boolean getPcmDeliver() throws IOException, CommandExecutionException {
+		BaseIssueFieldValue value = getFieldByName("PcmDeliver");
+        return value == null ? false : value.getValue().equals("Oui");
 	}
 }
