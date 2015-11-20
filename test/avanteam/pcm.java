@@ -67,8 +67,6 @@ public class pcm{
 		System.out.println("Issue created : " + issueId);
 		assertNotNull("Issue id non null", issueId);
 		assertTrue("Issue id non vide = " + issueId, !issueId.isEmpty());
-				
-		
 
 		issue.setState("Ouvert");
 		assertEquals("state open", issue.getState(), "Ouvert");
@@ -81,9 +79,6 @@ public class pcm{
 		issue.setAssignee("pchaumeil");
 		assertEquals("Assignee pchaumeil", issue.getAssignee().getValue(), "pchaumeil");
 		assertEquals("Assignee Patrick CHAUMEIL", issue.getAssignee().getFullName(), "Patrick CHAUMEIL");
-//		issue.setAssignee("vyamak");
-//		assertEquals("Assignee vyamak", issue.getAssignee().getValue(), "vyamak");
-//		assertEquals("Assignee Vincent YAMAK", issue.getAssignee().getFullName(), "Vincent YAMAK");
 
 		issue.setEstimation(60);
 		assertEquals("Estimation 60h", issue.getEstimation(), 60);
@@ -100,6 +95,12 @@ public class pcm{
 			}
 		}
 		assertTrue("Tag pour permanence", indexOf>-1);
+		
+		issue.setPcmNumber("PCM-2020-0001");
+		assertEquals("Numéro de PCM = PCM-2020-0001", issue.getPcmNumber(),"PCM-2020-0001");
+		
+		issue.setPcmDeliver(true);
+		assertTrue("PCM à livrer = Oui", issue.getPcmDeliver());
 		
 		System.out.println("Remove issue id = " + issue.getId());
 		youTrack.issues.remove(issue);
