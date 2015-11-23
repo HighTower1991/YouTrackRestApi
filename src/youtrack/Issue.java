@@ -266,16 +266,16 @@ public class Issue extends BaseItem<YouTrack> {
 		BaseIssueFieldValue number = getFieldByName("PCM");
         return number == null ? null : number.getValue();
 	}
-	public void setPcmDeliver(boolean deliver) throws SetIssueFieldException, IOException, NoSuchIssueFieldException, CommandExecutionException {
-		String fieldName = "PcmDeliver";
-		String value = deliver?"Oui":"Non";
+	public void setPcmDeliver(Deliver deliver) throws SetIssueFieldException, IOException, NoSuchIssueFieldException, CommandExecutionException {
+		String fieldName = "Hotfix";
+		String value = deliver.toString();
 		if(!fields.containsKey(fieldName )) {
         	createField(fieldName, value);
         }
     	setFieldByName(fieldName, value);
 	}
-	public Boolean getPcmDeliver() throws IOException, CommandExecutionException {
-		BaseIssueFieldValue value = getFieldByName("PcmDeliver");
-        return value == null ? false : value.getValue().equals("Oui");
+	public Deliver getPcmDeliver() throws IOException, CommandExecutionException {
+		BaseIssueFieldValue value = getFieldByName("Hotfix");
+        return value == null ? Deliver.Undefined : Deliver.getEnum(value.getValue());
 	}
 }
