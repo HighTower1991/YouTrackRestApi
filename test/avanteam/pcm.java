@@ -11,7 +11,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import youtrack.BaseItem;
-import youtrack.Deliver;
+import youtrack.Hotfix;
 import youtrack.Issue;
 import youtrack.IssueTag;
 import youtrack.Project;
@@ -100,8 +100,8 @@ public class pcm{
 		issue.setPcmNumber("PCM-2020-0001");
 		assertEquals("Numéro de PCM = PCM-2020-0001", issue.getPcmNumber(),"PCM-2020-0001");
 		
-		issue.setPcmDeliver(Deliver.Deliver);
-		assertEquals("PCM à livrer = Oui", issue.getPcmDeliver().name(), Deliver.Deliver.name());
+		issue.setHotfix(Hotfix.Deliver);
+		assertEquals("PCM à livrer = Oui", issue.getHotfix().name(), Hotfix.Deliver.name());
 		
 		System.out.println("Remove issue id = " + issue.getId());
 		youTrack.issues.remove(issue);

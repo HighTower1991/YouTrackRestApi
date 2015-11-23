@@ -1,6 +1,6 @@
 ﻿package youtrack;
 
-public enum Deliver {
+public enum Hotfix {
 	Undefined (""),
 	Deliver ("À livrer"),
 	Delivered ("Livré"),
@@ -8,7 +8,7 @@ public enum Deliver {
 	
 	private final String name;       
 
-    private Deliver(String s) {
+    private Hotfix(String s) {
         name = s;
     }
 
@@ -22,9 +22,9 @@ public enum Deliver {
     }
     
     
-    public static Deliver getEnum(String name){
-    	Deliver[] v = values();
-    	for (Deliver deliver : v) {
+    public static Hotfix getEnum(String name){
+    	Hotfix[] v = values();
+    	for (Hotfix deliver : v) {
 			if(deliver.toString().equals(name))
 				return deliver;
 		}

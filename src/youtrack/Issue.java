@@ -266,7 +266,7 @@ public class Issue extends BaseItem<YouTrack> {
 		BaseIssueFieldValue number = getFieldByName("PCM");
         return number == null ? null : number.getValue();
 	}
-	public void setPcmDeliver(Deliver deliver) throws SetIssueFieldException, IOException, NoSuchIssueFieldException, CommandExecutionException {
+	public void setHotfix(Hotfix deliver) throws SetIssueFieldException, IOException, NoSuchIssueFieldException, CommandExecutionException {
 		String fieldName = "Hotfix";
 		String value = deliver.toString();
 		if(!fields.containsKey(fieldName )) {
@@ -274,8 +274,8 @@ public class Issue extends BaseItem<YouTrack> {
         }
     	setFieldByName(fieldName, value);
 	}
-	public Deliver getPcmDeliver() throws IOException, CommandExecutionException {
+	public Hotfix getHotfix() throws IOException, CommandExecutionException {
 		BaseIssueFieldValue value = getFieldByName("Hotfix");
-        return value == null ? Deliver.Undefined : Deliver.getEnum(value.getValue());
+        return value == null ? Hotfix.Undefined : Hotfix.getEnum(value.getValue());
 	}
 }
