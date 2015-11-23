@@ -88,6 +88,7 @@ public abstract class Command<O extends BaseItem, R> {
         return result;
     }
     public HttpMethodBase getMethod() {
+    	method.getParams().setParameter("http.protocol.content-charset", "UTF-8");
         return method;
     }
     public abstract void createCommandMethod() throws Exception;
