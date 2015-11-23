@@ -15,6 +15,7 @@ import youtrack.Hotfix;
 import youtrack.Issue;
 import youtrack.IssueTag;
 import youtrack.Project;
+import youtrack.State;
 import youtrack.YouTrack;
 import youtrack.exceptions.CommandExecutionException;
 
@@ -69,8 +70,8 @@ public class pcm{
 		assertNotNull("Issue id non null", issueId);
 		assertTrue("Issue id non vide = " + issueId, !issueId.isEmpty());
 
-		issue.setState("Ouvert");
-		assertEquals("state open", issue.getState(), "Ouvert");
+		issue.setState(State.Open);
+		assertEquals("state open", issue.getState(), State.Open);
 		issue.setFixVersions("2016");
 		assertEquals("Fix version 2016", issue.getFixVersions(), "2016");
 		

@@ -115,12 +115,12 @@ public class Issue extends BaseItem<YouTrack> {
     public boolean isResolved() {
         return fields.containsKey("resolved");
     }
-    public String getState() throws IOException, CommandExecutionException {
+    public State getState() throws IOException, CommandExecutionException {
         final BaseIssueFieldValue state = getFieldByName("State");
-        return state == null ? null : state.getValue();
+        return state == null ? State.Undefined : State.getEnum(state.getValue());
     }
-    public void setState(String state) throws IOException, SetIssueFieldException, NoSuchIssueFieldException, CommandExecutionException {
-        setFieldByName("State", state);
+    public void setState(State state) throws IOException, SetIssueFieldException, NoSuchIssueFieldException, CommandExecutionException {
+        setFieldByName("State", state.toString());
     }
     public boolean isWikify() {
         return wikify;
